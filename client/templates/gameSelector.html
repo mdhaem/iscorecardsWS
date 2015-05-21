@@ -1,0 +1,11 @@
+<template name="gameSelector">
+	<div class="well">
+  		<select id = "cardGame">
+  			<option disabled selected>Select game...</option>
+  			{{#each cardGame}}
+			<option value = {{_id}}>{{name}}</option>
+    		{{/each}}
+		</select>
+		<a id="newGame"><small>Add card game...</small></a>
+	</div>
+</template>

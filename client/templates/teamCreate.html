@@ -1,0 +1,35 @@
+<template name="teamCreate">
+<div class="well">
+	<h4>Create New Team</h4>
+	<p id="instruction">Select players to make up team. If player is not listed, add new player below. <br/>Click the "Cancel" button when done creating teams.</p>
+  	<label id="newTeamMembers" for="players" >New Team:</label><br/>
+  	<select id = "players">
+  		<option disabled selected>Select player...</option>
+  		{{#each cardPlayer}}
+		<option value = {{_id}}>{{firstName}} {{lastName}}</option>
+    	{{/each}}
+	</select>
+	<input type="submit" id="addTeam" value="Add Team" class="btn-xs" />
+	<input type="submit" id="cancelTeam" value="Cancel" class="btn-xs" />	
+</div>
+<div class="well">
+<h4>Add New Player</h4>
+	<p id="instruction">Enter a first and last name and click the "Add" button.</p>
+	<form class="newPlayer">
+		<input type="text" id="newPlayerFirstName" placeholder="New player first name..." />
+		<input type="text" id="newPlayerLastName" placeholder="New player last name..." required />
+		<input type="submit" id="addPlayer" value="Add Player" class="btn-xs" />
+	</form>
+</div>
+<div class="well">
+	<h4>Delete Team</h4>
+		<select id = "cardTeam">
+			<option disabled selected>Select team...</option>
+			  {{#each cardTeam}}
+    		<option value={{_id}}>{{teams.team }}</option>
+    		{{/each}}
+  		</select>
+	<input type="submit" id="deleteTeam" value="Delete Team" class="btn-xs" />
+	<input type="submit" id="cancelTeam" value="Cancel" class="btn-xs" />
+</div>
+</template>

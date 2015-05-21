@@ -1,0 +1,12 @@
+<template name="teamSelector">
+	<div class="well">
+		
+		<select id = "cardTeam">
+			<option disabled selected>Select team...</option>
+			  {{#each cardTeam}}
+    		<option value={{_id}}>{{team}}</option>
+    		{{/each}}
+  		</select>
+  		<a id="newTeam"><small>Create new team...</small></a>
+  	</div>
+</template>

@@ -1,0 +1,16 @@
+<template name="layout">
+	<div  class="well" id="headder">
+  		<h2>iScoreCards</h2>
+  		{{> loginButtons}}
+  		<a href='#'>Home</a>
+  		<a href='#'>About</a>
+	</div>
+	<div>
+		{{> gamesMasterTemplate name=myDynName}}
+		{{> teamsMasterTemplate}}
+		{{> tables}}
+	</div>
+	<div>
+		{{> footer}}
+	</div>
+</template>
