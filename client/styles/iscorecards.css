@@ -1,4 +1,8 @@
 /* CSS declarations go here */
+body{
+    margin: 0;
+    padding: 0;
+}
 .inline{
 	float:left;
 	clear:both;
@@ -32,6 +36,9 @@ a {
 	text-align: center;
     border: none;
 }
+input.scoreCard{
+    width: 100%;
+}
 .scorecardsidemenu {
 	text-align: center;
 }
@@ -55,4 +62,26 @@ a {
 }
 td, #gamescore, #players, #history {
 	text-align: center;
+}
+
+@media (max-width: 350px) {
+ #card td {
+     padding: 5px 1px;
+     font-size: 10px;
+ }
+}
+@media (max-width: 450px) {
+    #card td {
+        padding: 5px 2px;
+        font-size: 12px;
+    }
+}
+@media (max-width: 768px) {
+    #card td {
+        padding: 5px 1px;
+        font-size: 10px;
+    }
+}
+@media (min-width: 1200px) {
+
 }

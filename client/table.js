@@ -1,6 +1,6 @@
 Template.tables.rendered = function(){
 	Session.set('tablesTemplateInstance', this._id);
-}
+};
 
 Template.tables.helpers({
 	table: function(row, column){
@@ -23,7 +23,7 @@ Template.tables.helpers({
             }
         }
 
-		var html = '<table id="card" class="table table-striped table-responsive">';
+		var html = '<div class="table-responsive"><table id="card" class="table table-striped table-condensed table-bordered">';
 		var history = true;
 		var playerNames = Session.get('playerNames');
 		var playersArray = null;
@@ -38,29 +38,29 @@ Template.tables.helpers({
 
 		//WIN HISTORY
 		if(history){
-			html += "<tr><td class='scorecardsidemenu' id='history'>History:</td>";
+			html += "<tr><td class='scorecardsidemenu info' id='history'>History:</td>";
 			for(var h=0; h<column; h++){
 				//html += "<td><input class='scoreCard' id='history" + playerPosition[h] + "' placeholder='0' /></td>"
-                html += "<td id='history'" + playerPosition[h] + "'>0</td>"
+                html += "<td id='history" + playerPosition[h] + "'>0</td>"
 			}
 			html += "</tr>";
 		}
 
 		//GAME SCORE
-		html += "<tr><td class='scorecardsidemenu' id='score'>Score:</td>";
+		html += "<tr><td class='scorecardsidemenu info' id='score'>Score:</td>";
 		for(var s=0; s<column; s++){
 			//html += "<td><input class='scoreCard'  id='gamescore" + playerPosition[s] + "' placeholder='0' type='number' /></td>"
-            html += "<td id='gamescore'" + playerPosition[s] + "'>0</td>"
+            html += "<td id='gamescore" + playerPosition[s] + "'>0</td>"
 		}
 		html += "</tr>";
 
 
 		// PLAYER NAMES
-		html += "<tr><td class='scorecardsidemenu' id='players'>Players:</td>";
+		html += "<tr class='info'><td class='scorecardsidemenu' id='players'>Players:</td>";
 		if(playersArray){
 			for(var p=0; p<column; p++){
 				//html += "<td><input class='scoreCard'  id='players" + playerPosition[p] + "' value='"+playersArray[p]+"'/></td>"
-                html += "<td id='players'" + playerPosition[p] + "'>"+playersArray[p]+"</td>"
+                html += "<td id='players" + playerPosition[p] + "'>"+playersArray[p]+"</td>"
 			}
 		}else{
 			for(var p=0; p<column; p++){
@@ -71,14 +71,14 @@ Template.tables.helpers({
 
 		//PLAYER SCORE
 		for(var r=0; r<Session.get('rows'); r++){
-			html += "<tr><td class='scorecardsidemenu' id='score'>"+(r+1)+"</td>";
+			html += "<tr><td class='scorecardsidemenu info' id='score'>"+(r+1)+"</td>";
 			for(var c=0; c<column; c++){
-				html += "<td><input class='scoreCard'  id='score" + playerPosition[c] + "' placeholder='0' type='number' /></td>"
+				html += "<td><input class='scoreCard'  id='score" + playerPosition[c] + "' placeholder='0' type='tel' /></td>"
 			}
 			html += "</tr>";
 			Session.set('r', r+1);
 		}
-		html += "</table>"
+		html += "</table></div>";
 		
 		return Spacebars.SafeString(html);
 	}
@@ -92,15 +92,15 @@ Template.tables.events({
  	Session.set('r', r);
  	var html =  "<tr><td class='scorecardsidemenu' id='score'>"+r+"</td>";
 	for(var c=0; c<column; c++){
-		html += "<td><input class='scoreCard' id='score" + playerPosition[c] + "' placeholder='0' type='number'/></td>"
-	};
-	html = html + "</tr>";
+		html += "<td><input class='scoreCard' id='score" + playerPosition[c] + "' placeholder='0' type='tel'/></td>"
+    }
+     html = html + "</tr>";
 
  	template.$('#card tr:last').after(html);
  },
     'click .removeRow': function(event,template){
  	    var r = Session.get('r');
- 	    Session.set('r', r-1)
+ 	    Session.set('r', r-1);
  	    //
  	    //IF DELETED ROW CONTAIN VALUES, DELETE VALUES FROM TOTAL
  	    //
@@ -108,15 +108,18 @@ Template.tables.events({
  },
     'change .scoreCard': function(event, template){
  	    var score = event.target.value;
- 	    if(parseInt(score)){
- 		    var scoreid = event.target.id;
- 		    var gamescoreid = "#gamescore" + scoreid.substring(5);
- 		    var gamescore = template.$(gamescoreid).text();
- 		    template.$(gamescoreid).text(gamescore*1+score*1);
-	    }else{
-		    event.target.value = "";
- 		    alert('A number is the only valid player score entry...');
- 	    }
+        $(event.target).css('background-color', '');
+        if (parseInt(score)) {
+            var scoreid = event.target.id;
+            var gamescoreid = "#gamescore" + scoreid.substring(5);
+            var gamescore = template.$(gamescoreid).text();
+            template.$(gamescoreid).text(parseInt(gamescore) + parseInt(score));
+        } else {
+            event.target.value = "";
+            $(event.target).css('background-color', 'pink');
+            $(event.target).attr('placeholder', 'numbers only');
+            //alert('A number is the only valid player score entry...');
+        }
  },
     'click #saveGame': function(event, template){
         //GET TEAM HISTORY
