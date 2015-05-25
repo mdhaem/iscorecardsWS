@@ -12,7 +12,13 @@ Template.teamSelector.helpers({
   Template.teamSelector.events({
     'change #cardTeam': function(event, template) {
         var playerNames = template.$('#cardTeam option:selected').text();
-        return Session.set('playerNames', playerNames);
+        Session.set('playerNames', playerNames);
+
+        return Session.set('teamSelectTemplate', 'selectedTeam');
+
+    },
+        'click #changeTeam': function(){
+          return Session.set('teamSelectTemplate', 'teamSelector');
     },
       'click #newTeam': function(){
           return Session.set('teamSelectTemplate', 'teamCreate');

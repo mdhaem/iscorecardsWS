@@ -1,12 +1,12 @@
 <template name="tables">
 	<div id="scoreCard">
-        <button class="btn btn-am btn-success pull-right" id="saveGame">Save Score</button>
-		<a ref="#" class="addRow"><small>Add Row</small></a>
-		<br/><br/>
+        <button type="button" class="btn btn-sm btn-link addRow" id="addRow">Add Row</button>
+        <button type="button" class="btn btn-sm btn-link" id="saveGame">Save Score</button>
+        <button type="button" class="btn btn-sm btn-link" id="playAgain">Play Again</button>
 		<form id="scorecard">
 			{{table}}
 		</form>
-		<br/><a ref="#" class="addRow"><small>Add Row</small></a>
-		<a ref="#" class="removeRow"><small>Delete Last Row</small></a>
+        <button type="button" class="btn btn-sm btn-link addRow" id="addRow">Add Row</button>
+        <button type="button" class="btn btn-sm btn-link removeRow" id="addRow">Delete Last Row</button>
 	</div>
 </template>

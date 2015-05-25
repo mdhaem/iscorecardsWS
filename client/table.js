@@ -7,7 +7,7 @@ Template.tables.helpers({
 		playerPosition = ['one','two','three','four','five','six','seven', 'eight'];
         Session.setDefault('rows', 7);
         Session.setDefault('columns', 4);
-
+        Session.setDefault('teamHistory', "0, 0, 0, 0");
         //GET TEAM HISTORY
         var gameCursor = CardGames.find({_id: Session.get('selectedGame')});
         var gameArray = gameCursor.fetch();
@@ -22,6 +22,14 @@ Template.tables.helpers({
                 }
             }
         }
+
+        //CREATE TEAM HISTORY ARRAY
+        var history = Session.get('teamHistory');
+        Session.set('historyArray', history.split(',').map(function(item) {
+            return parseInt(item, 10);
+        })
+        );
+        //Session.set('historyArray', historyArray);
 
 		var html = '<div class="table-responsive"><table id="card" class="table table-striped table-condensed table-bordered">';
 		var history = true;
@@ -41,7 +49,7 @@ Template.tables.helpers({
 			html += "<tr><td class='scorecardsidemenu info' id='history'>History:</td>";
 			for(var h=0; h<column; h++){
 				//html += "<td><input class='scoreCard' id='history" + playerPosition[h] + "' placeholder='0' /></td>"
-                html += "<td id='history" + playerPosition[h] + "'>0</td>"
+                html += "<td id='history" + playerPosition[h] + "'>"+Session.get('historyArray')[h]+"</td>";
 			}
 			html += "</tr>";
 		}
@@ -60,7 +68,7 @@ Template.tables.helpers({
 		if(playersArray){
 			for(var p=0; p<column; p++){
 				//html += "<td><input class='scoreCard'  id='players" + playerPosition[p] + "' value='"+playersArray[p]+"'/></td>"
-                html += "<td id='players" + playerPosition[p] + "'>"+playersArray[p]+"</td>"
+                html += "<td id='players" + playerPosition[p] + "'><strong>"+playersArray[p]+"</strong></td>"
 			}
 		}else{
 			for(var p=0; p<column; p++){
@@ -109,7 +117,7 @@ Template.tables.events({
     'change .scoreCard': function(event, template){
  	    var score = event.target.value;
         $(event.target).css('background-color', '');
-        if (parseInt(score)) {
+        if (parseInt(score, 10) || score == "0") {
             var scoreid = event.target.id;
             var gamescoreid = "#gamescore" + scoreid.substring(5);
             var gamescore = template.$(gamescoreid).text();
@@ -118,22 +126,11 @@ Template.tables.events({
             event.target.value = "";
             $(event.target).css('background-color', 'pink');
             $(event.target).attr('placeholder', 'numbers only');
-            //alert('A number is the only valid player score entry...');
         }
  },
     'click #saveGame': function(event, template){
-        //GET TEAM HISTORY
-        //var gameCursor = CardGames.find({_id: Session.get('selectedGame')});
-        //var gameArray = gameCursor.fetch();
-        //for (var i=0; i<gameArray.length; i++) {
-        //    Session.set('winner', gameArray[i].winner );
-        //    var teamsArray = gameArray[i].teams;
-        //    for (var y=0; y<teamsArray.length; y++) {
-        //        if(teamsArray[y].team == Session.get('playerNames')){
-        //            Session.set('teamHistory', teamsArray[y].history );
-        //        }
-        //    }
-        //}
+
+        template.$('#saveGame').attr('disabled', 'true');
 
         //CREATE TEAM HISTORY ARRAY
         var history = Session.get('teamHistory');
@@ -145,8 +142,9 @@ Template.tables.events({
         var scores = [];
         for (var i=0; i<historyArray.length; i++){
             var id = '#gamescore' + playerPosition[i];
-            scores.push(template.$(id).val());
+            scores.push(template.$(id).text());
         }
+        //alert('scores = '+scores+' typeOf scores = '+typeof(scores));
 
         //ID WINNING SCORE
         var winningScore = 0;
@@ -158,6 +156,8 @@ Template.tables.events({
 
         //UPDATE TEAM HISTORY ARRAY
         for(var i=0; i<historyArray.length; i++){
+            //alert('historyArray = '+historyArray);
+            //alert('winningScore = '+winningScore);
             if(scores[i] == winningScore){
                 var val = historyArray[i];
                 val = parseInt(val);
@@ -168,5 +168,6 @@ Template.tables.events({
         history = historyArray.toString();
 
         Meteor.call('updateTeamGameHistory',Session.get('selectedGame'), Session.get('playerNames'), history);
+
 	}
 });
